@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BoaViagem</string>
+    <string name="usuario">Usuário</string>
+    <string name="senha">Senha</string>
+    <string name="entrar">Entrar</string>
+    <string name="erroAutenticacao">Usuário/Senha Incorretos. Tente Novamente.</string>
+    <string name="novoGasto">Novo Gasto</string>
+    <string name="novaViagem">Nova Viagem</string>
+    <string name="minhasViagens">Minhas Viagens</string>
+    <string name="configuracoes">Configurações</string>
+</resources>
