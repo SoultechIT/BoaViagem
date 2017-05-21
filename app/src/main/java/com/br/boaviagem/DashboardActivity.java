@@ -32,8 +32,4 @@ public class DashboardActivity extends Activity {
                 break;
         }
     }
-
-    public void teste(){
-
-    }
 }

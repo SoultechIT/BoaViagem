@@ -5,7 +5,6 @@
     <string name="entrar">Entrar</string>
     <string name="erroAutenticacao">Usuário/Senha Incorretos. Tente Novamente.</string>
     <string name="novoGasto">Novo Gasto</string>
-    <string name="novaViagem">Nova Viagem</string>
     <string name="minhasViagens">Minhas Viagens</string>
     <string name="configuracoes">Configurações</string>
     <string name="destino">Destino</string>
@@ -18,4 +17,6 @@
     <string name="orcamento">Orçamento</string>
     <string name="qtde_de_pessoas">Quantidade de Pessoas</string>
     <string name="salvar">Salvar</string>
+    <string name="novaViagem">Nova Viagem</string>
+    <string name="nao_implementado">Função ainda não implementada</string>
 </resources>
