@@ -22,4 +22,8 @@ public class DashboardActivity extends Activity {
         String opcao = "Opção: " + textView.getText().toString();
         Toast.makeText(this, opcao, Toast.LENGTH_LONG).show();
     }
+
+    public void teste(){
+
+    }
 }
