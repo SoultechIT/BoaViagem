@@ -1,6 +1,7 @@
 package com.br.boaviagem;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,9 +19,18 @@ public class DashboardActivity extends Activity {
     }
 
     public void selecionarOpcao (View view){
-        TextView textView = (TextView) view;
-        String opcao = "Opção: " + textView.getText().toString();
-        Toast.makeText(this, opcao, Toast.LENGTH_LONG).show();
+
+        switch (view.getId()){
+            case R.id.novaViagem:
+                startActivity(new Intent(this,ViagemActivity.class));
+                break;
+
+            default:
+                TextView textView = (TextView) view;
+                String opcao = "Opção: " + textView.getText().toString();
+                Toast.makeText(this, opcao, Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     public void teste(){
