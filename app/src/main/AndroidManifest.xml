@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ViagemActivity"></activity>
+        <activity android:name=".GastoActivity"></activity>
 
     </application>
 

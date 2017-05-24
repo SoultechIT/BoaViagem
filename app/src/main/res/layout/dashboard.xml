@@ -27,7 +27,7 @@
             android:clickable="true"
             android:drawableTop="@drawable/novo_gasto"
             android:onClick="selecionarOpcao"
-            android:text="@string/novoGasto"
+            android:text="@string/novo_gasto"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
 
