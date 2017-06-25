@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +25,8 @@ import java.util.Objects;
  * Created by marco on 25/05/2017.
  */
 
-public class ViagemListActivity extends ListActivity implements AdapterView.OnItemClickListener, DialogInterface.OnClickListener {
+public class ViagemListActivity extends ListActivity implements AdapterView.OnItemClickListener,
+        DialogInterface.OnClickListener, SimpleAdapter.ViewBinder{
 
     private List<Map<String,Object>> viagens;
     private AlertDialog alertDialog;
@@ -46,6 +48,7 @@ public class ViagemListActivity extends ListActivity implements AdapterView.OnIt
         int[] para = {R.id.tipoViagem, R.id.destino, R.id.data, R.id.valor, R.id.barraProgresso};
 
         SimpleAdapter adapter = new SimpleAdapter(this,listarViagens(),R.layout.lista_viagem,de,para);
+        adapter.setViewBinder(this);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
         this.alertDialog = criaAlertDialog();
@@ -150,5 +153,19 @@ public class ViagemListActivity extends ListActivity implements AdapterView.OnIt
 
         return viagens;
 
+    }
+
+    @Override
+    public boolean setViewValue(View view, Object data, String textRepresentation  ){
+        if(view.getId()==R.id.barraProgresso){
+            Double valores[] = (Double[]) data;
+            ProgressBar progressBar = (ProgressBar) view;
+            progressBar.setMax(valores[0].intValue());
+            progressBar.setSecondaryProgress(valores[1].intValue());
+            progressBar.setProgress(valores[2].intValue());
+            return true;
+        }else{
+            return false;
+        }
     }
 }
