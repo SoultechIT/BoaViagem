@@ -15,7 +15,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/tipo_viagem" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -38,6 +37,12 @@
             android:id="@+id/valor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/barraProgresso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleHorizontal"/>
 
     </LinearLayout>
 
