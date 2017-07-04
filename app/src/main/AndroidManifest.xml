@@ -10,25 +10,22 @@
         android:theme="@android:style/Theme.NoTitleBar">
 
         <activity android:name=".BoaViagemActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN"></action>
-                <category android:name="android.intent.category.LAUNCHER"></category>
-            </intent-filter>-->
-        </activity>
-        <activity android:name=".DashboardActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.VIEW"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
-            </intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
+        <activity android:name=".DashboardActivity">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN"></action>
+                <category android:name="android.intent.category.LAUNCHER"></category>
+            </intent-filter>-->
+        </activity>
         <activity android:name=".GastoActivity"></activity>
         <activity android:name=".GastoListActivity"></activity>
         <activity android:name=".ViagemActivity"></activity>
         <activity android:name=".ViagemListActivity"></activity>
+        <activity android:name=".ConfiguracoesActivity"></activity>
 
     </application>
 

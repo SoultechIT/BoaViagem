@@ -36,6 +36,10 @@ public class DashboardActivity extends Activity {
                 startActivity(new Intent(this,ViagemListActivity.class));
                 break;
 
+            case R.id.configuracoes:
+                startActivity(new Intent(this, ConfiguracoesActivity.class));
+                break;
+
             default:
                 TextView textView = (TextView) view;
                 String opcao = "Opção: " + textView.getText().toString();
