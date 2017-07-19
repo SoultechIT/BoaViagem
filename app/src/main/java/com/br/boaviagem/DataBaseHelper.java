@@ -19,15 +19,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE viagem (_id INTEGER PRIMARY_KEY, " +
-        "destino TEXT, tipo_viagem INTEGER, " +
-        "data_chegada DATE, data_saida DATE, " +
-        "orcamento DOUBLE, quantidade_pessoas INTEGER);");
+  /*      db.execSQL("CREATE TABLE viagem (_id INTEGER PRIMARY_KEY, " +
+                "destino TEXT, tipo_viagem INTEGER, " +
+                "data_chegada DATE, data_saida DATE, " +
+                "orcamento DOUBLE, quantidade_pessoas INTEGER);");
+*/
+        db.execSQL("CREATE TABLE VIAGEM (_ID INTEGER PRIMARY KEY," +
+                " DESTINO TEXT, TIPO_VIAGEM INTEGER, DATA_CHEGADA DATE," +
+                " DATA_SAIDA DATE, ORCAMENTO DOUBLE, QUANTIDADE_PESSOAS INTEGER);");
 
         /*db.execSQL("CREATE TABLE gasto (_id INTEGER PRIMARY_KEY, " +
-        "categoria TEXT, data DATE, valor DOUBLE, " +
-        "descricao TEXT, local TEXT, viagem_id INTEGER, " +
-        "FOREIGN_KEY(viagem_id) REFERENCES viagem(_id));");*/
+                "categoria TEXT, data DATE, valor DOUBLE, " +
+                "descricao TEXT, local TEXT, viagem_id INTEGER, " +
+                "FOREIGN_KEY(viagem_id) REFERENCES viagem(_id));");
+*/
+        db.execSQL("CREATE TABLE GASTO (_ID INTEGER PRIMARY KEY," +
+                " CATEGORIA TEXT, DATA DATE, VALOR DOUBLE, DESCRICAO TEXT," +
+                " LOCAL TEXT, VIAGEM_ID INTEGER," +
+                " FOREIGN KEY(VIAGEM_ID) REFERENCES VIAGEM(_ID));");
+
     }
 
     @Override

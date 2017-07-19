@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,6 +31,7 @@ public class ViagemActivity extends Activity {
     private DataBaseHelper helper;
     private EditText destino, quantidadePessoas, orcamento;
     private RadioGroup radioGroup;
+    private String id;
 
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -51,10 +54,24 @@ public class ViagemActivity extends Activity {
 
         helper = new DataBaseHelper(this);
 
+        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
+
+        if(id!=null){
+            prepararEdicao();
+        }
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        helper.close();
+        super.onDestroy();
     }
 
     public void salvarViagem(View view){
+
         SQLiteDatabase db = helper.getWritableDatabase();
+        long resultado;
 
         ContentValues values = new ContentValues();
         values.put("destino", destino.getText().toString());
@@ -66,12 +83,16 @@ public class ViagemActivity extends Activity {
         int tipo = radioGroup.getCheckedRadioButtonId();
 
         if (tipo==R.id.lazer){
-            values.put("tipo_viagem", 1);
+            values.put("tipo_viagem", Constantes.VIAGEM_LAZER);
         } else{
-            values.put("tipo_viagem", 2);
+            values.put("tipo_viagem", Constantes.VIAGEM_NEGOCIOS);
         }
 
-        long resultado = db.insert("viagem", null, values);
+        if(id==null){
+            resultado = db.insert("viagem", null, values);
+        }else {
+            resultado = db.update("viagem", values, "_id = ?", new String[]{id});
+        }
 
         if(resultado != -1){
             Toast toast = Toast.makeText(this,getString(R.string.registro_salvo),Toast.LENGTH_LONG);
@@ -84,6 +105,32 @@ public class ViagemActivity extends Activity {
         /*String msg = getResources().getString(R.string.nao_implementado);
         Toast toast = Toast.makeText(this,msg,Toast.LENGTH_LONG);
         toast.show();*/
+    }
+
+    private void prepararEdicao(){
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT tipo_viagem, destino, " +
+                "data_chegada, data_saida, quantidade_pessoas, orcamento FROM viagem WHERE viagem_id = ?", new String[]{id});
+
+        cursor.moveToFirst();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        if (cursor.getInt(0)==Constantes.VIAGEM_LAZER){
+            radioGroup.check(R.id.lazer);
+        }else{
+            radioGroup.check(R.id.negocios);
+        }
+
+        destino.setText(cursor.getString(1));
+        dataChegada = new Date(cursor.getLong(2));
+        dataSaida = new Date(cursor.getLong(3));
+        dataChegadaButton.setText(dateFormat.format(dataChegada));
+        dataSaidaButton.setText(dateFormat.format(dataSaida));
+        quantidadePessoas.setText(cursor.getString(4));
+        orcamento.setText(cursor.getString(5));
+        cursor.close();
     }
 
     public void selecionarData(View view){

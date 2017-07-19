@@ -1,6 +1,8 @@
 package com.br.boaviagem;
 
 import android.app.ListActivity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -13,6 +15,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +29,9 @@ import java.util.Map;
 public class GastoListActivity extends ListActivity implements AdapterView.OnItemClickListener {
 
     private List<Map<String,Object>> gastos;
+    private DataBaseHelper helper;
+    private String id;
+    private SimpleDateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -48,6 +54,11 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
                 android.R.layout.simple_list_item_1, listarGastos()));
         ListView listView = getListView();
         listView.setOnItemClickListener(this);*/
+
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Recupera ID da Viagem
+        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
     }
 
     @Override
@@ -65,9 +76,50 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
 
     private List<Map<String,Object>> listarGastos(){
 
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT _id, data, descricao, " +
+                "valor, categoria, FROM gasto WHERE id_viagem = ?", new String[]{id});
+
+        cursor.moveToFirst();
+
         gastos = new ArrayList<Map<String,Object>>();
 
-        Map<String,Object> item = new HashMap<>();
+        for (int i=0; i<cursor.getCount();i++) {
+
+            long data = cursor.getLong(0);
+            String descricao = cursor.getString(1);
+            Double valor = cursor.getDouble(2);
+            String categoria = cursor.getString(3);
+
+            Map<String,Object> item = new HashMap<>();
+            item.put("data", dateFormat.format(data));
+            item.put("descricao", descricao);
+            item.put("valor", "R$ " + valor);
+
+            if(categoria == Constantes.categoria_alimentacao){
+                item.put("categoria", R.color.categoria_alimentacao);
+            }
+            if(categoria == Constantes.categoria_hospedagem){
+                item.put("categoria", R.color.categoria_hospedagem);
+            }
+            if(categoria == Constantes.categoria_combustivel){
+                item.put("categoria", R.color.categoria_combustivel);
+            }
+            if(categoria == Constantes.categoria_transporte){
+                item.put("categoria", R.color.categoria_transporte);
+            }
+            if(categoria == Constantes.categoria_outros){
+                item.put("categoria", R.color.categoria_outros);
+            }
+            gastos.add(item);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        // Método fake
+
+        /*Map<String,Object> item = new HashMap<>();
         item.put("data", "03/02/2017");
         item.put("descricao", "Diária Hotel");
         item.put("valor", "R$ 138,40");
@@ -108,7 +160,7 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
         item.put("valor", "R$ 12,50");
         item.put("categoria", R.color.categoria_outros);
         gastos.add(item);
-
+*/
         return gastos;
         //return Arrays.asList("Sanduba, R$ 19,00", "Original, R$ 12,00", "Rollmops, R$ 3,50");
     }
