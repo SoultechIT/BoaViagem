@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by marco on 23/05/2017.
@@ -23,7 +24,8 @@ import java.util.Calendar;
 public class GastoActivity extends Activity {
 
     private int ano, mes, dia;
-    private Button dataGasto;
+    private Button dataGastoButton;
+    private Date dataGasto;
     private Spinner categoria;
     private DataBaseHelper helper;
     private EditText valor, descricao, local;
@@ -38,8 +40,8 @@ public class GastoActivity extends Activity {
         mes = calendar.get(Calendar.MONTH);
         dia = calendar.get(Calendar.DAY_OF_MONTH);
 
-        dataGasto = (Button) findViewById(R.id.data);
-        dataGasto.setText(dia + "/" + mes + "/" + ano);
+        dataGastoButton = (Button) findViewById(R.id.data);
+        dataGastoButton.setText(dia + "/" + mes + "/" + ano);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.categoria_gasto,
@@ -74,12 +76,20 @@ public class GastoActivity extends Activity {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+            Calendar calendar = Calendar.getInstance();
             ano = year;
             mes = monthOfYear;
             dia = dayOfMonth;
-            dataGasto.setText(dia + "/" + (mes+1) + "/" + ano);
+            dataGasto = criarData(ano,mes,dia);
+            dataGastoButton.setText(dia + "/" + (mes+1) + "/" + ano);
         }
     };
+
+    private Date criarData(int ano, int mes, int dia){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(ano, mes, dia);
+        return calendar.getTime();
+    }
 
     public void registrarGasto(View view){
 
@@ -89,7 +99,7 @@ public class GastoActivity extends Activity {
         ContentValues values = new ContentValues();
         values.put("categoria", categoria.getSelectedItem().toString());
         values.put("valor", valor.getText().toString());
-        values.put("data", dataGasto.getText().toString());
+        values.put("data", dataGasto.getTime());
         values.put("descricao", descricao.getText().toString());
         values.put("local", local.getText().toString());
 

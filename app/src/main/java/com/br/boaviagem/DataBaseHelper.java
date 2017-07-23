@@ -24,7 +24,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "data_chegada DATE, data_saida DATE, " +
                 "orcamento DOUBLE, quantidade_pessoas INTEGER);");
 */
-        db.execSQL("CREATE TABLE VIAGEM (_ID INTEGER PRIMARY KEY," +
+        db.execSQL("CREATE TABLE VIAGEM (_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 " DESTINO TEXT, TIPO_VIAGEM INTEGER, DATA_CHEGADA DATE," +
                 " DATA_SAIDA DATE, ORCAMENTO DOUBLE, QUANTIDADE_PESSOAS INTEGER);");
 
@@ -33,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "descricao TEXT, local TEXT, viagem_id INTEGER, " +
                 "FOREIGN_KEY(viagem_id) REFERENCES viagem(_id));");
 */
-        db.execSQL("CREATE TABLE GASTO (_ID INTEGER PRIMARY KEY," +
+        db.execSQL("CREATE TABLE GASTO (_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 " CATEGORIA TEXT, DATA DATE, VALOR DOUBLE, DESCRICAO TEXT," +
                 " LOCAL TEXT, VIAGEM_ID INTEGER," +
                 " FOREIGN KEY(VIAGEM_ID) REFERENCES VIAGEM(_ID));");

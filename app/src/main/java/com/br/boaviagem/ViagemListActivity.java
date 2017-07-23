@@ -62,8 +62,8 @@ public class ViagemListActivity extends ListActivity implements AdapterView.OnIt
         String valor = preferencias.getString("valor_limite", "-1");
         valorLimite = Double.valueOf(valor);
 
-        String[] de = {"imagem", "destino", "data", "valor", "barraProgresso"};
-        int[] para = {R.id.tipoViagem, R.id.destino, R.id.data, R.id.valor, R.id.barraProgresso};
+        String[] de = { "imagem", "destino", "data", "valor", "barraProgresso"};
+        int[] para = { R.id.tipoViagem, R.id.destino, R.id.data, R.id.valor, R.id.barraProgresso};
 
         SimpleAdapter adapter = new SimpleAdapter(this,listarViagens(),R.layout.lista_viagem,de,para);
         adapter.setViewBinder(this);
@@ -235,10 +235,17 @@ public class ViagemListActivity extends ListActivity implements AdapterView.OnIt
 
     private double calcularTotalGasto(SQLiteDatabase db, String id){
 
-        Cursor cursor = db.rawQuery("SELECT SUM(valor) FROM gasto WHERE viagem_id = ?", new String[]{id});
-        cursor.moveToFirst();
-        double total = cursor.getDouble(0);
-        cursor.close();
+        double total;
+
+        try {
+            Cursor cursor = db.rawQuery("SELECT SUM(valor) FROM gasto WHERE viagem_id = ?", new String[]{id});
+            cursor.moveToFirst();
+            total = cursor.getDouble(0);
+            cursor.close();
+        }catch(Exception e){
+            e.printStackTrace();
+            total = 0;
+        }
         return total;
     }
 

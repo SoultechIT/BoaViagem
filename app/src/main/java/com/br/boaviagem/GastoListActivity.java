@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,18 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        String[] de = {"data", "descricao", "valor", "categoria"};
+        helper = new DataBaseHelper(this);
 
+        // Recupera ID da Viagem
+        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
+
+
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String[] de = {"data", "descricao", "valor", "categoria"};
         int[] para = {R.id.data, R.id.descricao, R.id.valor, R.id.categoria};
 
-        SimpleAdapter adapter = new SimpleAdapter(this, listarGastos(), R.layout.lista_gasto, de, para);
+        SimpleAdapter adapter = new SimpleAdapter(this, listarGastos(id), R.layout.lista_gasto, de, para);
         adapter.setViewBinder(new GastoViewBinder());
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
@@ -55,10 +63,6 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
         ListView listView = getListView();
         listView.setOnItemClickListener(this);*/
 
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        // Recupera ID da Viagem
-        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
     }
 
     @Override
@@ -74,11 +78,12 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
 
     }
 
-    private List<Map<String,Object>> listarGastos(){
+    private List<Map<String,Object>> listarGastos(String id){
 
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT _id, data, descricao, " +
-                "valor, categoria, FROM gasto WHERE id_viagem = ?", new String[]{id});
+
+        Cursor cursor = db.rawQuery("SELECT data, descricao, " +
+                "valor, categoria FROM gasto WHERE viagem_id = ?", new String[]{id});
 
         cursor.moveToFirst();
 
@@ -86,29 +91,31 @@ public class GastoListActivity extends ListActivity implements AdapterView.OnIte
 
         for (int i=0; i<cursor.getCount();i++) {
 
+            String dataString = cursor.getString(0);
+            Date dataCompra = new Date(cursor.getLong(0));
             long data = cursor.getLong(0);
             String descricao = cursor.getString(1);
             Double valor = cursor.getDouble(2);
             String categoria = cursor.getString(3);
 
             Map<String,Object> item = new HashMap<>();
-            item.put("data", dateFormat.format(data));
+            item.put("data", dateFormat.format(dataCompra));
             item.put("descricao", descricao);
             item.put("valor", "R$ " + valor);
 
-            if(categoria == Constantes.categoria_alimentacao){
+            if(categoria.equalsIgnoreCase(Constantes.categoria_alimentacao)){
                 item.put("categoria", R.color.categoria_alimentacao);
             }
-            if(categoria == Constantes.categoria_hospedagem){
+            if(categoria.equalsIgnoreCase(Constantes.categoria_hospedagem)){
                 item.put("categoria", R.color.categoria_hospedagem);
             }
-            if(categoria == Constantes.categoria_combustivel){
+            if(categoria.equalsIgnoreCase(Constantes.categoria_combustivel)){
                 item.put("categoria", R.color.categoria_combustivel);
             }
-            if(categoria == Constantes.categoria_transporte){
+            if(categoria.equalsIgnoreCase(Constantes.categoria_transporte)){
                 item.put("categoria", R.color.categoria_transporte);
             }
-            if(categoria == Constantes.categoria_outros){
+            if(categoria.equalsIgnoreCase(Constantes.categoria_outros)){
                 item.put("categoria", R.color.categoria_outros);
             }
             gastos.add(item);
