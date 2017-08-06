@@ -37,6 +37,9 @@ public class ViagemActivity extends Activity {
         super.onCreate(savedInstance);
         setContentView(R.layout.novaviagem);
 
+        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
+        helper = new DataBaseHelper(this);
+
         Calendar calendar = Calendar.getInstance();
         ano = calendar.get(Calendar.YEAR);
         mes = calendar.get(Calendar.MONTH);
@@ -51,10 +54,6 @@ public class ViagemActivity extends Activity {
         quantidadePessoas = (EditText) findViewById(R.id.quantidadePessoas);
         orcamento = (EditText) findViewById(R.id.orcamento);
         radioGroup = (RadioGroup) findViewById(R.id.tipoViagem);
-
-        helper = new DataBaseHelper(this);
-
-        id = getIntent().getStringExtra(Constantes.VIAGEM_ID);
 
         if(id!=null){
             prepararEdicao();
@@ -111,7 +110,7 @@ public class ViagemActivity extends Activity {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT tipo_viagem, destino, " +
-                "data_chegada, data_saida, quantidade_pessoas, orcamento FROM viagem WHERE viagem_id = ?", new String[]{id});
+                "data_chegada, data_saida, quantidade_pessoas, orcamento FROM viagem WHERE _id = ?", new String[]{id});
 
         cursor.moveToFirst();
 
